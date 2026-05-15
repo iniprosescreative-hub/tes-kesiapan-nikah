@@ -1,0 +1,393 @@
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<h2 class="sr-only">Kuis Seberapa Siap Kamu Nikah — Mobile Friendly</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-size:16px}
+.qw{padding:1rem 0;font-family:var(--font-sans);max-width:520px;margin:0 auto}
+.screen{display:none}.screen.active{display:block}
+
+/* HERO */
+.hero{text-align:center;padding:2rem 1.25rem 1.5rem}
+.hero-badge{display:inline-block;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:20px;font-size:11px;color:var(--color-text-secondary);padding:5px 14px;margin-bottom:1.1rem;letter-spacing:.3px}
+.hero h1{font-size:clamp(20px,5vw,26px);font-weight:600;color:var(--color-text-primary);margin-bottom:.6rem;line-height:1.3}
+.hero p{font-size:clamp(14px,3.5vw,15px);color:var(--color-text-secondary);line-height:1.65;max-width:400px;margin:0 auto 1.5rem}
+.hero-cats{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:1.75rem}
+.cat-tag{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:20px;font-size:12px;color:var(--color-text-secondary);padding:5px 13px}
+.btn-primary{display:inline-block;background:var(--color-text-primary);color:var(--color-background-primary);border:none;border-radius:var(--border-radius-md);padding:15px 40px;font-size:16px;font-weight:600;cursor:pointer;width:100%;max-width:320px;transition:opacity .15s;letter-spacing:.1px}
+.btn-primary:active{opacity:.8}
+
+/* FORM */
+.form-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.5rem 1.25rem;margin-bottom:1rem}
+.form-card h2{font-size:clamp(16px,4vw,18px);font-weight:600;color:var(--color-text-primary);margin-bottom:.35rem}
+.form-card>p{font-size:13px;color:var(--color-text-secondary);margin-bottom:1.25rem;line-height:1.55}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:13px;font-weight:500;color:var(--color-text-secondary);margin-bottom:7px}
+.field input,.field select{width:100%;padding:13px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:16px;color:var(--color-text-primary);background:var(--color-background-primary);appearance:none;-webkit-appearance:none}
+.field input:focus,.field select:focus{outline:2px solid var(--color-text-primary);outline-offset:1px;border-color:transparent}
+.field input::placeholder{color:var(--color-text-tertiary)}
+.select-wrap{position:relative}
+.select-wrap::after{content:"▾";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--color-text-tertiary);pointer-events:none}
+.privacy-note{font-size:12px;color:var(--color-text-tertiary);line-height:1.6;margin-top:.85rem;display:flex;gap:6px;align-items:flex-start}
+.form-submit{padding:0 0 .5rem}
+.err-msg{font-size:13px;color:var(--color-text-danger);margin-top:.6rem;display:none;text-align:center}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:1.25rem}
+.progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);margin-bottom:8px;font-weight:500}
+.progress-bar{height:5px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden}
+.progress-fill{height:5px;background:var(--color-text-primary);border-radius:3px;transition:width .35s ease}
+
+/* QUESTION */
+.q-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.5rem 1.25rem}
+.q-cat{font-size:12px;color:var(--color-text-tertiary);margin-bottom:.6rem;display:flex;align-items:center;gap:5px;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.q-cat-dot{width:7px;height:7px;border-radius:50%;background:var(--color-text-tertiary);flex-shrink:0}
+.q-text{font-size:clamp(15px,4vw,17px);font-weight:500;color:var(--color-text-primary);line-height:1.55;margin-bottom:1.35rem}
+.options{display:flex;flex-direction:column;gap:10px}
+.opt-btn{background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:14px 16px;text-align:left;font-size:clamp(13px,3.5vw,14px);color:var(--color-text-primary);cursor:pointer;transition:border-color .15s,background .15s;line-height:1.45;min-height:52px;display:flex;align-items:center}
+.opt-btn:active{background:var(--color-background-primary)}
+.opt-btn.selected{border-color:var(--color-text-primary);background:var(--color-background-primary);font-weight:500}
+.opt-indicator{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-right:12px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.opt-btn.selected .opt-indicator{background:var(--color-text-primary);border-color:var(--color-text-primary)}
+.opt-indicator-dot{width:7px;height:7px;border-radius:50%;background:var(--color-background-primary);opacity:0;transition:opacity .15s}
+.opt-btn.selected .opt-indicator-dot{opacity:1}
+
+/* NAV */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem;gap:10px}
+.btn-back{background:none;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:13px 20px;font-size:15px;color:var(--color-text-secondary);cursor:pointer;flex:1;max-width:120px}
+.btn-back:active{background:var(--color-background-secondary)}
+.btn-next{background:var(--color-text-primary);color:var(--color-background-primary);border:none;border-radius:var(--border-radius-md);padding:13px 24px;font-size:15px;font-weight:600;cursor:pointer;opacity:.35;pointer-events:none;transition:opacity .2s;flex:2}
+.btn-next.enabled{opacity:1;pointer-events:auto}
+.btn-next:active{opacity:.8}
+
+/* RESULT */
+.result-header{text-align:center;padding:1.5rem 1rem 1rem}
+.res-badge{display:inline-block;border-radius:20px;font-size:12px;font-weight:600;padding:7px 18px;margin-bottom:1rem;letter-spacing:.2px}
+.result-header h2{font-size:clamp(17px,4.5vw,20px);font-weight:600;color:var(--color-text-primary);margin-bottom:.5rem;line-height:1.35}
+.result-header p{font-size:clamp(13px,3.5vw,14px);color:var(--color-text-secondary);line-height:1.65}
+.cat-results{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem}
+.cat-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem 1.25rem}
+.cat-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.cat-name{font-size:14px;font-weight:600;color:var(--color-text-primary)}
+.cat-pct{font-size:13px;font-weight:600;color:var(--color-text-secondary)}
+.cat-bar-bg{height:7px;background:var(--color-border-tertiary);border-radius:4px;overflow:hidden}
+.cat-bar-fill{height:7px;border-radius:4px;transition:width .7s ease}
+.cat-insight{font-size:13px;color:var(--color-text-secondary);margin-top:9px;line-height:1.6}
+
+/* CTA */
+.cta-card{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.35rem 1.25rem;text-align:center;margin-bottom:1rem}
+.cta-card h3{font-size:clamp(14px,4vw,16px);font-weight:600;color:var(--color-text-primary);margin-bottom:.4rem}
+.cta-card p{font-size:13px;color:var(--color-text-secondary);margin-bottom:1.1rem;line-height:1.6}
+.cta-row{display:flex;flex-direction:column;gap:10px}
+.btn-cta-main{background:var(--color-text-primary);color:var(--color-background-primary);border:none;border-radius:var(--border-radius-md);padding:15px;font-size:15px;font-weight:600;cursor:pointer;width:100%}
+.btn-cta-main:active{opacity:.8}
+.btn-cta-sec{background:none;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:14px;font-size:15px;color:var(--color-text-secondary);cursor:pointer;width:100%}
+.btn-cta-sec:active{background:var(--color-background-secondary)}
+.db-status{font-size:12px;color:var(--color-text-tertiary);text-align:center;margin-top:.5rem}
+.retry-row{text-align:center;margin-top:.75rem;padding-bottom:.5rem}
+.btn-retry{background:none;border:none;font-size:13px;color:var(--color-text-tertiary);cursor:pointer;text-decoration:underline;padding:8px}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:100;align-items:flex-end;justify-content:center}
+@media(min-width:520px){.modal-overlay{align-items:center}}
+.modal-box{background:var(--color-background-primary);border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:520px;border-top:0.5px solid var(--color-border-tertiary)}
+@media(min-width:520px){.modal-box{border-radius:var(--border-radius-lg);padding:1.5rem}}
+.modal-handle{width:40px;height:4px;background:var(--color-border-tertiary);border-radius:2px;margin:0 auto 1.25rem}
+@media(min-width:520px){.modal-handle{display:none}}
+.modal-box h3{font-size:16px;font-weight:600;color:var(--color-text-primary);margin-bottom:.3rem}
+.modal-box>p{font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem}
+.caption-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:1rem;font-size:13px;color:var(--color-text-primary);line-height:1.75;white-space:pre-wrap;margin-bottom:1rem;max-height:200px;overflow-y:auto}
+.modal-btns{display:flex;flex-direction:column;gap:10px}
+.btn-copy{background:var(--color-text-primary);color:var(--color-background-primary);border:none;border-radius:var(--border-radius-md);padding:14px;font-size:15px;font-weight:600;cursor:pointer}
+.btn-close-modal{background:none;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:13px;font-size:15px;color:var(--color-text-secondary);cursor:pointer}
+.copy-confirm{font-size:12px;color:var(--color-text-success);text-align:center;margin-top:.6rem;display:none}
+</style>
+
+<div class="qw" id="main-wrap">
+
+<!-- INTRO -->
+<div class="screen active" id="screen-intro">
+  <div class="hero">
+    <div class="hero-badge">✦ Quiz · 10 pertanyaan</div>
+    <h1>Seberapa siap<br>kamu nikah?</h1>
+    <p>Bukan soal siap secara finansial aja — tapi siap secara keseluruhan. Cek kondisi kamu di 4 area utama.</p>
+    <div class="hero-cats">
+      <span class="cat-tag">💰 Keuangan</span>
+      <span class="cat-tag">🧠 Kesehatan mental</span>
+      <span class="cat-tag">💬 Komunikasi</span>
+      <span class="cat-tag">🗺️ Visi bersama</span>
+    </div>
+    <button class="btn-primary" onclick="goToForm()">Mulai kuis →</button>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="screen" id="screen-form">
+  <div class="form-card">
+    <h2>Sebelum mulai, kenalan dulu</h2>
+    <p>Data ini digunakan untuk personalisasi hasil kuismu dan tidak akan disebarluaskan.</p>
+    <div class="field">
+      <label for="f-nama">Nama kamu <span style="color:var(--color-text-danger)">*</span></label>
+      <input type="text" id="f-nama" placeholder="Contoh: Sari" autocomplete="given-name">
+    </div>
+    <div class="field">
+      <label for="f-hp">Nomor HP / WhatsApp <span style="color:var(--color-text-danger)">*</span></label>
+      <input type="tel" id="f-hp" placeholder="Contoh: 08123456789" autocomplete="tel" inputmode="numeric">
+    </div>
+    <div class="field">
+      <label for="f-email">Alamat email <span style="color:var(--color-text-danger)">*</span></label>
+      <input type="email" id="f-email" placeholder="Contoh: sari@gmail.com" autocomplete="email" inputmode="email">
+    </div>
+    <div class="field">
+      <label for="f-status">Status sekarang</label>
+      <div class="select-wrap">
+        <select id="f-status">
+          <option value="">— Pilih status —</option>
+          <option value="Pacaran biasa">Pacaran biasa</option>
+          <option value="Pacaran serius / menuju nikah">Pacaran serius / menuju nikah</option>
+          <option value="Sudah tunangan">Sudah tunangan</option>
+          <option value="Single, sedang mempersiapkan diri">Single, sedang mempersiapkan diri</option>
+          <option value="Baru putus / evaluasi diri">Baru putus / evaluasi diri</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="f-timeline">Rencana menikah dalam</label>
+      <div class="select-wrap">
+        <select id="f-timeline">
+          <option value="">— Pilih timeline —</option>
+          <option value="Kurang dari 6 bulan">Kurang dari 6 bulan</option>
+          <option value="6–12 bulan">6–12 bulan</option>
+          <option value="1–2 tahun">1–2 tahun</option>
+          <option value="Lebih dari 2 tahun">Lebih dari 2 tahun</option>
+          <option value="Belum tahu">Belum tahu</option>
+        </select>
+      </div>
+    </div>
+    <p class="privacy-note"><span>🔒</span><span>Data kamu aman. Hanya digunakan untuk personalisasi hasil dan follow-up dari @iniproses.</span></p>
+  </div>
+  <div class="form-submit" style="text-align:center">
+    <button class="btn-primary" onclick="startQuiz()">Lanjut ke kuis →</button>
+    <div id="form-err" class="err-msg">Isi nama, nomor HP, dan email dulu ya.</div>
+    <div id="email-err" class="err-msg">Format email tidak valid.</div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="screen-quiz">
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span id="q-label">Pertanyaan 1 dari 10</span>
+      <span id="cat-label" style="font-weight:600"></span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:10%"></div></div>
+  </div>
+  <div class="q-card">
+    <div class="q-cat"><div class="q-cat-dot" id="q-cat-dot"></div><span id="q-cat-name"></span></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="q-options"></div>
+  </div>
+  <div class="nav-row">
+    <button class="btn-back" id="btn-back" onclick="prevQ()">← Kembali</button>
+    <button class="btn-next" id="btn-next" onclick="nextQ()">Lanjut →</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="screen-result">
+  <div class="result-header">
+    <div class="res-badge" id="res-badge"></div>
+    <h2 id="res-title"></h2>
+    <p id="res-desc"></p>
+  </div>
+  <div class="cat-results" id="cat-results"></div>
+  <div class="cta-card">
+    <h3>Siap mulai ngobrol sama pasangan?</h3>
+    <p>Ebook <em>Obrolan Dewasa Sebelum Adegan Dewasa</em> memandu kalian berdua membahas topik-topik penting dengan cara yang aman dan mengalir.</p>
+    <div class="cta-row">
+      <button class="btn-cta-main" onclick="window.open('https://iniproses.store/paket-lengkap-persiapan-nikah','_blank')">📖 Dapatkan ebooknya</button>
+      <button class="btn-cta-sec" onclick="showCaption()">✦ Bagikan hasilku</button>
+    </div>
+  </div>
+  <div id="db-status-msg" class="db-status"></div>
+  <div class="retry-row"><button class="btn-retry" onclick="resetQuiz()">Ulangi kuis dari awal</button></div>
+</div>
+
+</div>
+
+<!-- MODAL CAPTION -->
+<div class="modal-overlay" id="modal-caption">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <h3>Caption siap pakai ✨</h3>
+    <p>Copy dan paste ke Instagram Story, caption feed, atau status WhatsApp kamu.</p>
+    <div class="caption-box" id="caption-text"></div>
+    <div class="modal-btns">
+      <button class="btn-copy" onclick="copyCaption()">Copy caption</button>
+      <button class="btn-close-modal" onclick="closeModal()">Tutup</button>
+    </div>
+    <div class="copy-confirm" id="copy-confirm">✓ Berhasil di-copy!</div>
+  </div>
+</div>
+
+<script>
+const WEBHOOK_URL="https://script.google.com/macros/s/AKfycbx2wYl4X6ACW_bdtrFl_RijVBo9S3XM3dg0thtkpZ-mCvSruaopkjrw39Jn76b3giRZfg/exec";
+const CAT_COLORS={"Keuangan":"#639922","Kesehatan mental":"#378ADD","Komunikasi":"#D4537E","Visi bersama":"#BA7517"};
+const QUESTIONS=[
+  {cat:"Keuangan",q:"Kamu dan pasangan sudah pernah ngobrol soal pengelolaan keuangan bersama setelah menikah?",opts:[{t:"Belum pernah sama sekali",s:1},{t:"Pernah, tapi belum serius",s:2},{t:"Sudah dibahas dan ada gambaran kasar",s:3},{t:"Sudah sepakat dan punya rencana konkret",s:4}]},
+  {cat:"Keuangan",q:"Seberapa jelas kondisi keuanganmu saat ini — tabungan, utang, dan pengeluaran bulanan?",opts:[{t:"Tidak terlalu tahu detail-nya",s:1},{t:"Tahu gambaran besarnya saja",s:2},{t:"Cukup paham dan tercatat",s:3},{t:"Sangat jelas dan sudah dikelola dengan baik",s:4}]},
+  {cat:"Kesehatan mental",q:"Ketika kamu sedang stres berat, pasangan tahu cara terbaik untuk mendampingimu?",opts:[{t:"Belum pernah dibicarakan",s:1},{t:"Dia menebak-nebak, belum tepat",s:2},{t:"Sudah mulai ngerti tapi masih kadang keliru",s:3},{t:"Dia tahu persis apa yang aku butuhkan",s:4}]},
+  {cat:"Kesehatan mental",q:"Kamu sudah mengenal pola attachment diri sendiri dan bagaimana itu mempengaruhi hubungan?",opts:[{t:"Belum pernah dengar istilah ini",s:1},{t:"Pernah dengar tapi belum memahami diriku",s:2},{t:"Sudah mulai memahami polaku sendiri",s:3},{t:"Paham dan sudah dibicarakan dengan pasangan",s:4}]},
+  {cat:"Komunikasi",q:"Saat ada konflik atau ketidaksepakatan, bagaimana biasanya kalian menyelesaikannya?",opts:[{t:"Salah satu menghindar atau diam",s:1},{t:"Sering memanas dan butuh waktu lama",s:2},{t:"Bisa diselesaikan meski kadang butuh waktu",s:3},{t:"Bisa ngobrol dengan kepala dingin dan ketemu solusi",s:4}]},
+  {cat:"Komunikasi",q:"Kamu merasa bebas mengungkapkan perasaan tidak nyaman atau ketidaksetujuan kepada pasangan?",opts:[{t:"Susah — takut konflik atau menyakiti",s:1},{t:"Kadang bisa, kadang nahan",s:2},{t:"Cukup terbuka, tapi masih ada yang ditahan",s:3},{t:"Sangat terbuka dan aman untuk jujur",s:4}]},
+  {cat:"Visi bersama",q:"Kalian sudah membicarakan soal anak — mau punya berapa, bagaimana pola asuhnya?",opts:[{t:"Belum pernah dibicarakan",s:1},{t:"Pernah disinggung tapi belum serius",s:2},{t:"Sudah ngobrol dan ada gambaran awal",s:3},{t:"Sudah sepakat atau minimal saling tahu posisi masing-masing",s:4}]},
+  {cat:"Visi bersama",q:"Soal karier dan ambisi pribadi setelah menikah, kalian sudah saling tahu ekspektasi masing-masing?",opts:[{t:"Belum pernah dibahas",s:1},{t:"Tahu garis besarnya tapi belum detail",s:2},{t:"Sudah cukup dibahas dan saling mendukung",s:3},{t:"Sudah sangat jelas dan aligned",s:4}]},
+  {cat:"Keuangan",q:"Kamu tahu gaya pengelolaan keuangan pasangan — apakah dia tipe hemat, impulsif, atau terencana?",opts:[{t:"Tidak tahu sama sekali",s:1},{t:"Agak tahu dari kebiasaan sehari-hari",s:2},{t:"Tahu dan pernah dibahas",s:3},{t:"Sangat tahu dan sudah ada kesepakatan",s:4}]},
+  {cat:"Kesehatan mental",q:"Kamu merasa kondisi mentalmu saat ini cukup stabil untuk memulai komitmen jangka panjang?",opts:[{t:"Masih ada isu yang belum terselesaikan",s:1},{t:"Lumayan stabil tapi ada beberapa hal yang perlu digarap",s:2},{t:"Cukup stabil, masih dalam proses bertumbuh",s:3},{t:"Merasa stabil dan siap berkomitmen",s:4}]},
+];
+const CAT_INFO={
+  "Keuangan":{low:"Belum banyak ngobrol soal finansial bareng pasangan. Ini salah satu topik terpenting sebelum nikah.",mid:"Ada beberapa hal yang sudah dibahas, tapi masih banyak area yang perlu dikupas lebih dalam.",high:"Kondisi finansialmu cukup solid. Pastikan kalian juga sepakat soal gaya hidup dan prioritas ke depan."},
+  "Kesehatan mental":{low:"Kesehatan mental adalah fondasi relasi yang sehat. Mulailah dengan mengenal diri sendiri dulu.",mid:"Kamu sudah mulai sadar diri. Langkah berikutnya adalah berbagi insight ini dengan pasangan.",high:"Kesadaran mentalmu bagus. Terus jaga komunikasi terbuka soal kondisi emosional masing-masing."},
+  "Komunikasi":{low:"Komunikasi yang sehat adalah skill yang bisa dipelajari. Mulailah dengan berlatih mengungkapkan perasaan tanpa menyalahkan.",mid:"Kalian sudah punya dasar yang lumayan. Fokus ke area yang masih berat.",high:"Pola komunikasi kalian cukup sehat. Ini modal besar untuk menikah."},
+  "Visi bersama":{low:"Banyak pasangan yang asik bareng tapi belum pernah ngobrol soal arah hidup ke depan.",mid:"Sudah ada beberapa visi yang disejajarkan, tapi masih ada topik penting yang perlu dijelajahi.",high:"Kalian punya kejelasan visi yang bagus. Ini fondasi penting agar pernikahan punya arah yang disepakati."}
+};
+
+let current=0,answers={},catScores={},catMax={},totalPct=0,levelHasil='',userData={};
+
+function goToForm(){
+  document.getElementById('screen-intro').classList.remove('active');
+  document.getElementById('screen-form').classList.add('active');
+  window.scrollTo(0,0);
+}
+function isValidEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
+function startQuiz(){
+  const nama=document.getElementById('f-nama').value.trim();
+  const hp=document.getElementById('f-hp').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  document.getElementById('form-err').style.display='none';
+  document.getElementById('email-err').style.display='none';
+  if(!nama||!hp||!email){document.getElementById('form-err').style.display='block';return;}
+  if(!isValidEmail(email)){document.getElementById('email-err').style.display='block';return;}
+  userData={nama,hp,email,
+    status:document.getElementById('f-status').value||'Tidak diisi',
+    timeline:document.getElementById('f-timeline').value||'Tidak diisi'
+  };
+  document.getElementById('screen-form').classList.remove('active');
+  document.getElementById('screen-quiz').classList.add('active');
+  window.scrollTo(0,0);
+  renderQ();
+}
+function renderQ(){
+  const q=QUESTIONS[current];
+  const color=CAT_COLORS[q.cat]||'#888';
+  document.getElementById('q-label').textContent=`Pertanyaan ${current+1} dari ${QUESTIONS.length}`;
+  document.getElementById('cat-label').textContent=q.cat;
+  document.getElementById('q-cat-name').textContent=q.cat;
+  document.getElementById('q-cat-dot').style.background=color;
+  document.getElementById('q-text').textContent=q.q;
+  document.getElementById('prog-fill').style.width=`${((current+1)/QUESTIONS.length)*100}%`;
+  const ow=document.getElementById('q-options');
+  ow.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const sel=answers[current]===i;
+    const btn=document.createElement('button');
+    btn.className='opt-btn'+(sel?' selected':'');
+    btn.innerHTML=`<div class="opt-indicator"><div class="opt-indicator-dot"></div></div><span>${o.t}</span>`;
+    btn.onclick=()=>selectOpt(i);
+    ow.appendChild(btn);
+  });
+  document.getElementById('btn-back').style.visibility=current===0?'hidden':'visible';
+  const nb=document.getElementById('btn-next');
+  nb.textContent=current===QUESTIONS.length-1?'Lihat hasilku ✓':'Lanjut →';
+  answers[current]!==undefined?nb.classList.add('enabled'):nb.classList.remove('enabled');
+}
+function selectOpt(i){
+  answers[current]=i;
+  document.querySelectorAll('.opt-btn').forEach((b,idx)=>b.classList.toggle('selected',idx===i));
+  document.getElementById('btn-next').classList.add('enabled');
+}
+function nextQ(){if(answers[current]===undefined)return;if(current<QUESTIONS.length-1){current++;window.scrollTo(0,0);renderQ();}else showResult();}
+function prevQ(){if(current>0){current--;window.scrollTo(0,0);renderQ();}}
+function showResult(){
+  document.getElementById('screen-quiz').classList.remove('active');
+  document.getElementById('screen-result').classList.add('active');
+  window.scrollTo(0,0);
+  catScores={};catMax={};
+  QUESTIONS.forEach((q,i)=>{
+    if(!catScores[q.cat]){catScores[q.cat]=0;catMax[q.cat]=0;}
+    catScores[q.cat]+=(answers[i]!==undefined?q.opts[answers[i]].s:1);
+    catMax[q.cat]+=4;
+  });
+  const totalScore=Object.values(catScores).reduce((a,b)=>a+b,0);
+  const totalMax=Object.values(catMax).reduce((a,b)=>a+b,0);
+  totalPct=Math.round((totalScore/totalMax)*100);
+  let badge,title,desc;
+  if(totalPct<=40){
+    badge='Masih banyak yang perlu dieksplor';title='Kamu butuh lebih banyak obrolan yang dalam';
+    desc=`${userData.nama}, bukan berarti belum siap — tapi ada banyak topik penting yang belum sempat kalian sentuh. Ini momen yang tepat untuk mulai.`;
+    levelHasil='Perlu banyak eksplorasi';
+    document.getElementById('res-badge').style.cssText='background:var(--color-background-danger);color:var(--color-text-danger);';
+  } else if(totalPct<=65){
+    badge='Cukup siap, masih ada yang perlu digarap';title='Fondasimu lumayan, ada celah yang perlu ditutup';
+    desc=`${userData.nama}, kalian sudah punya beberapa hal yang solid. Fokus ke area yang skornya rendah.`;
+    levelHasil='Cukup siap';
+    document.getElementById('res-badge').style.cssText='background:var(--color-background-warning);color:var(--color-text-warning);';
+  } else {
+    badge='Siap dan sadar diri';title='Kalian punya fondasi yang kuat';
+    desc=`${userData.nama}, kesiapanmu di atas rata-rata. Tapi ingat — pernikahan adalah perjalanan, bukan finish line.`;
+    levelHasil='Siap dan sadar diri';
+    document.getElementById('res-badge').style.cssText='background:var(--color-background-success);color:var(--color-text-success);';
+  }
+  document.getElementById('res-badge').textContent=badge;
+  document.getElementById('res-title').textContent=title;
+  document.getElementById('res-desc').textContent=desc;
+  const cw=document.getElementById('cat-results');
+  cw.innerHTML='';
+  Object.keys(catScores).forEach(cat=>{
+    const info=CAT_INFO[cat];
+    const color=CAT_COLORS[cat];
+    const p=Math.round((catScores[cat]/catMax[cat])*100);
+    const insight=p<=40?info.low:p<=70?info.mid:info.high;
+    cw.innerHTML+=`<div class="cat-card"><div class="cat-top"><span class="cat-name">${cat}</span><span class="cat-pct">${p}%</span></div><div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${p}%;background:${color}"></div></div><div class="cat-insight">${insight}</div></div>`;
+  });
+  sendToSheet();
+}
+function sendToSheet(){
+  const statusEl=document.getElementById('db-status-msg');
+  statusEl.textContent='Menyimpan data...';
+  const payload={
+    nama:userData.nama,status:userData.status,hp:userData.hp,
+    email:userData.email,timeline:userData.timeline,
+    skorTotal:totalPct,levelHasil,
+    keuangan:Math.round((catScores['Keuangan']||0)/(catMax['Keuangan']||4)*100),
+    kesehatanMental:Math.round((catScores['Kesehatan mental']||0)/(catMax['Kesehatan mental']||4)*100),
+    komunikasi:Math.round((catScores['Komunikasi']||0)/(catMax['Komunikasi']||4)*100),
+    visiBersama:Math.round((catScores['Visi bersama']||0)/(catMax['Visi bersama']||4)*100)
+  };
+  fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(r=>r.json()).then(d=>{statusEl.textContent=d.success?'✓ Data tersimpan.':'';}).catch(()=>{statusEl.textContent='';});
+}
+function showCaption(){
+  const keu=Math.round((catScores['Keuangan']||0)/(catMax['Keuangan']||4)*100);
+  const men=Math.round((catScores['Kesehatan mental']||0)/(catMax['Kesehatan mental']||4)*100);
+  const kom=Math.round((catScores['Komunikasi']||0)/(catMax['Komunikasi']||4)*100);
+  const vis=Math.round((catScores['Visi bersama']||0)/(catMax['Visi bersama']||4)*100);
+  const weakest=[['Keuangan',keu],['Kesehatan mental',men],['Komunikasi',kom],['Visi bersama',vis]].sort((a,b)=>a[1]-b[1])[0][0];
+  const caption=`Baru selesai kuis "Seberapa Siap Kamu Nikah?" dari @iniproses dan hasilnya bikin mikir 👀\n\nSkor total: ${totalPct}% — ${levelHasil}\n\nBreakdown per area:\n💰 Keuangan: ${keu}%\n🧠 Kesehatan mental: ${men}%\n💬 Komunikasi: ${kom}%\n🗺️ Visi bersama: ${vis}%\n\nYang paling perlu digarap? ${weakest}.\n\nKalau kamu juga lagi di fase persiapan nikah, coba kuis-nya di bio @iniproses. Gratis.\n\n#persiapannikah #pranikah #iniproses #kuiskesiapannikah`;
+  document.getElementById('caption-text').textContent=caption;
+  document.getElementById('modal-caption').style.display='flex';
+}
+function copyCaption(){
+  navigator.clipboard.writeText(document.getElementById('caption-text').textContent).then(()=>{
+    const c=document.getElementById('copy-confirm');c.style.display='block';setTimeout(()=>c.style.display='none',2500);
+  });
+}
+function closeModal(){document.getElementById('modal-caption').style.display='none';}
+function resetQuiz(){
+  current=0;answers={};catScores={};catMax={};totalPct=0;levelHasil='';userData={};
+  document.getElementById('screen-result').classList.remove('active');
+  document.getElementById('modal-caption').style.display='none';
+  document.getElementById('screen-intro').classList.add('active');
+  window.scrollTo(0,0);
+}
+</script>
